@@ -13,7 +13,7 @@ public class DataModel<T> extends Object implements Serializable {
 	public DataModel(Long id, T content) {
 		this.id = id;
 		this.content = content;
-	}
+	} 
 	
 	public int hashCode() {
 		
