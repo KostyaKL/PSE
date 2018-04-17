@@ -4,13 +4,15 @@ import java.io.Serializable;
 
 public class DataModel<T> extends Object implements Serializable {
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
+	
+	Long id;
+	T content;
 
 	public DataModel(Long id, T content) {
-		
+		this.id = id;
+		this.content = content;
 	}
 	
 	public int hashCode() {
@@ -30,20 +32,20 @@ public class DataModel<T> extends Object implements Serializable {
 	
 	public Long getDataModelId() {
 		
-		return null;
+		return id;
 	}
 	
 	public void setDataModelId(Long id) {
-		
+		this.id = id;
 	}
 	
 	public T getContent() {
 		
-		return null;
+		return content;
 	}
 	
 	public void setContent(T content) {
-		
+		this.content = content;
 		
 	}
 
