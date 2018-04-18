@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class DataModel<T> extends Object implements Serializable {
 	
-	
 	private static final long serialVersionUID = 1L;
 	
 	Long id;
@@ -17,17 +16,19 @@ public class DataModel<T> extends Object implements Serializable {
 	
 	public int hashCode() {
 		
-		return 0;
+		return id.hashCode();
 	}
 	
 	public boolean equals(Object obj) {
-		
+		if(id.hashCode() == obj.hashCode()) {
+			return true;
+		}
 		return false;
 	}
 	
 	public String toString() {
 		
-		return " ";
+		return "ID: " + id.toString() + ", Content: " + content.toString();
 	}
 	
 	public Long getDataModelId() {
@@ -48,5 +49,4 @@ public class DataModel<T> extends Object implements Serializable {
 		this.content = content;
 		
 	}
-
 }
