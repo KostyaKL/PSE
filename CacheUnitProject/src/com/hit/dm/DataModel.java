@@ -14,11 +14,13 @@ public class DataModel<T> extends Object implements Serializable {
 		this.content = content;
 	} 
 	
+	@Override
 	public int hashCode() {
 		
 		return id.hashCode();
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if(id.hashCode() == obj.hashCode()) {
 			return true;
@@ -26,6 +28,7 @@ public class DataModel<T> extends Object implements Serializable {
 		return false;
 	}
 	
+	@Override
 	public String toString() {
 		
 		return "ID: " + id.toString() + ", Content: " + content.toString();
