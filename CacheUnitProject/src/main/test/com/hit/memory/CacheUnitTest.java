@@ -21,7 +21,7 @@ class CacheUnitTest {
 	
 	public CacheUnitTest() {
 		algo = new LRUAlgoCacheImp<>(3);
-		dao = new DaoFileImpl<String>("myFile.dat");
+		dao = new DaoFileImpl<String>("src/main/resource/datasource.txt");
 		testRun = new CacheUnit<String>(algo, dao);
 		ids = new Long[5];
 		
