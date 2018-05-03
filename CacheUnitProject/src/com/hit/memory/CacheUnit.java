@@ -1,7 +1,6 @@
 package com.hit.memory;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +13,9 @@ import com.hit.dm.DataModel;
 public class CacheUnit<T> extends Object {
 	
 	IAlgoCache<Long,DataModel<T>> algo;
-	IDao<Serializable,DataModel<T>> dao;
+	IDao<Long,DataModel<T>> dao;
 
-	public CacheUnit(IAlgoCache<Long,DataModel<T>> algo, IDao<Serializable,DataModel<T>> dao) {
+	public CacheUnit(IAlgoCache<Long,DataModel<T>> algo, IDao<Long,DataModel<T>> dao) {
 		this.algo = algo;
 		this.dao = dao;
 		
@@ -26,17 +25,27 @@ public class CacheUnit<T> extends Object {
 	public DataModel<T>[] getDataModels(Long[] ids) throws ClassNotFoundException, IOException {
 		int size = ids.length;
 		DataModel<T> tmp;
+		DataModel<T> dump;
 		
 		List<DataModel<T>> ret = new ArrayList<>();
 		
+		
+		
 		for(int i=0;i<size;i++) {
 			tmp = algo.getElement(ids[i]);
+			
 			if(tmp != null){
+				System.out.println(tmp.toString());
 				ret.add(tmp);
 			}
 			else {
 				tmp = dao.find(ids[i]);
-				algo.putElement(ids[i], tmp);
+				dump = algo.putElement(ids[i], tmp);
+				if(dump != null) {
+					dao.delete(dump);
+					dao.save(dump);
+				}
+				
 			}
 		}
 		

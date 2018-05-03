@@ -1,7 +1,10 @@
 package com.hit.dao;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.nio.channels.FileChannel;
 import java.util.Scanner;
 
 import com.hit.dm.DataModel;
@@ -30,6 +33,7 @@ public class DaoFileImpl<T> extends Object implements IDao<Long,DataModel<T>> {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void delete(DataModel<T> entity) {
 		File tmp = new File("tmp.dat");
@@ -43,31 +47,42 @@ public class DaoFileImpl<T> extends Object implements IDao<Long,DataModel<T>> {
 			scan = new Scanner(file);
 			while(scan.hasNext()) {
 				line = scan.nextLine().toString();
-				if(!line.contains("ID: " + srchID)){
-					fw.write(line);
+				if(!line.contains("ID: " + srchID + ", ")){
+					fw.write(line + "\n");
 				}
 			}
 			scan.close();
 			fw.close();
-			tmp.renameTo(file);
+			FileChannel src = new FileInputStream(tmp).getChannel();
+			FileChannel dest = new FileOutputStream(file).getChannel();
+			dest.transferFrom(src, 0, src.size());	
+			src.close();
+			dest.close();
+			tmp.delete();
 		}
 		catch (Exception e) {
 			System.out.println("file delete error: " + e);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public DataModel<T> find(Long id) {
 		DataModel<T> ret = null;
 		Scanner scan;
 		String line;
 		T content;
-		
+				
 		try {
 			scan = new Scanner(file);
 			while(scan.hasNext()) {
 				line = scan.nextLine().toString();
-				if(line.contains("ID: " + id.toString())){
+				
+				if(line.contains("ID: " + id.toString() + ", ")){
+					String remove = new String("ID: " + id.toString() + ", C");
+					line.replaceAll(remove, "C");
+					System.out.println(remove);
+					System.out.println(line);
 					content = (T)line;
 					scan.close();
 					ret = new DataModel<T>(id, content);
