@@ -42,7 +42,7 @@ class CacheUnitTest {
 		catch (IOException e) {
 			System.out.println("IOException " + e);
 		}
-				
-		Assert.assertEquals("ID: 0, Content: kostya", check[4].toString());
+		
+		Assert.assertEquals("[1, 2, 3] {1=ID: 1, Content: alice, 2=ID: 2, Content: bob, 3=ID: 3, Content: ron}", algo.toString());
 	}
 }

@@ -34,18 +34,20 @@ public class CacheUnit<T> extends Object {
 		for(int i=0;i<size;i++) {
 			tmp = algo.getElement(ids[i]);
 			
-			if(tmp != null){
+			if(tmp != null){ 
 				System.out.println(tmp.toString());
 				ret.add(tmp);
 			}
 			else {
 				tmp = dao.find(ids[i]);
-				dump = algo.putElement(ids[i], tmp);
-				if(dump != null) {
-					dao.delete(dump);
-					dao.save(dump);
+				if(tmp!= null) {
+					dump = algo.putElement(ids[i], tmp);
+					if(dump != null) {
+						dao.delete(dump);
+						dao.save(dump);
+					}
+					ret.add(tmp);
 				}
-				
 			}
 		}
 		

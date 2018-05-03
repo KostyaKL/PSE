@@ -79,11 +79,8 @@ public class DaoFileImpl<T> extends Object implements IDao<Long,DataModel<T>> {
 				line = scan.nextLine().toString();
 				
 				if(line.contains("ID: " + id.toString() + ", ")){
-					String remove = new String("ID: " + id.toString() + ", C");
-					line.replaceAll(remove, "C");
-					System.out.println(remove);
-					System.out.println(line);
-					content = (T)line;
+					String remove = new String("ID: " + id.toString() + ", Content: ");
+					content = (T)line.subSequence(remove.length(), line.length());
 					scan.close();
 					ret = new DataModel<T>(id, content);
 					return ret;
