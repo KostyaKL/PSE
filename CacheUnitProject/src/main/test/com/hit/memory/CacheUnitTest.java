@@ -44,5 +44,6 @@ class CacheUnitTest {
 		}
 		
 		Assert.assertEquals("[1, 2, 3] {1=ID: 1, Content: alice, 2=ID: 2, Content: bob, 3=ID: 3, Content: ron}", algo.toString());
+		Assert.assertEquals("ID: 0, Content: nissim", check[0].toString());
 	}
 }
