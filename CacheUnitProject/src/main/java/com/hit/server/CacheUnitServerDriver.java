@@ -2,7 +2,7 @@ package com.hit.server;
 
 import com.hit.util.CLI;
 
-public class CacheUnitServerDriver extends java.lang.Object {
+public class CacheUnitServerDriver extends Object {
 
 	public CacheUnitServerDriver() {
 		

@@ -1,40 +1,43 @@
 package com.hit.server;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Request<T> extends java.lang.Object implements java.io.Serializable {
+public class Request<T> extends Object implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	Map<String, String> headers;
+	T body;
 
-	public Request(java.util.Map<java.lang.String,java.lang.String> headers, T body) {
-		
+	public Request(Map<String, String> headers, T body) {
+		this.headers = headers;
+		this.body = body;
 	}
 	
 	public Map<String, String> getHeaders(){
 		
-		Map<String, String> ret = null;
-		return ret;
+		return headers;
 	}
 	
-	public void setHeaders(java.util.Map<java.lang.String,java.lang.String> headers) {
-		
+	public void setHeaders(Map<String, String> headers) {
+		this.headers = headers;
 	}
 	
 	public T getBody() {
 		
-		T ret = null;
-		return ret;
+		return body;
 	}
 	
 	public void setBody(T body) {
-		
+		this.body = body;
 	}
 	
 	public String toString(){
 		
-		return "ret";
+		return headers.toString() + " " + body.toString();
 	}
 }

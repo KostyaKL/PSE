@@ -3,9 +3,10 @@ package com.hit.util;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Observable;
 import java.util.Scanner;
 
-public class CLI extends java.util.Observable implements java.lang.Runnable {
+public class CLI extends Observable implements Runnable {
 
     String start;
     String shutdown;
@@ -35,10 +36,12 @@ public class CLI extends java.util.Observable implements java.lang.Runnable {
             if(userString == start) {
                 write("Starting server.....");
                 flag = 1;
+                notifyObservers(start);
             }
             else if (userString == shutdown) {
                 write("Shutdown server");
                 flag = 2;
+                notifyObservers(shutdown);
             }
             else {
                 write("Not a valid command");
