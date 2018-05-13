@@ -1,5 +1,8 @@
 package com.hit.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.hit.algorithm.IAlgoCache;
 import com.hit.algorithm.LRUAlgoCacheImp;
 import com.hit.dao.DaoFileImpl;
@@ -20,7 +23,6 @@ public class CacheUnitService<T> extends Object {
 		algo = new LRUAlgoCacheImp<>(3);
 		dao = new DaoFileImpl<>("src/main/resource/datasource.txt");
 		cache = new CacheUnit<>(algo, dao);
-		//request = new Request<T>();
 	}
 	
 	public boolean update(DataModel<T>[] dataModels) {
@@ -34,6 +36,19 @@ public class CacheUnitService<T> extends Object {
 	}
 	
 	public DataModel<T>[] get(DataModel<T>[] dataModels){
+		List<Long> ids = new ArrayList<>();
+		int size;
+		size = dataModels.length;
+		for(int i=0;i<size;i++) {
+			ids.add(dataModels[i].getDataModelId());
+		}
+		
+		try {
+			cache.getDataModels(ids.toArray((Long[]) new Long[size]));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return dataModels;
 	}
