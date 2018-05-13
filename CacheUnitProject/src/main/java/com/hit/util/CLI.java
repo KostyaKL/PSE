@@ -22,6 +22,8 @@ public class CLI extends Observable implements Runnable {
         
         start = "start";
         shutdown = "stop";
+        
+        userString = "";
     }
     
     public void write(String string) {
@@ -33,14 +35,16 @@ public class CLI extends Observable implements Runnable {
         write("Please enter your command");
         do {
             userString = in.nextLine();
-            if(userString == start) {
+            if(userString.equals(start)) {
                 write("Starting server.....");
                 flag = 1;
+                setChanged();
                 notifyObservers(start);
             }
-            else if (userString == shutdown) {
+            else if (userString.equals(shutdown)) {
                 write("Shutdown server");
                 flag = 2;
+                setChanged();
                 notifyObservers(shutdown);
             }
             else {

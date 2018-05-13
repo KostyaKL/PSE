@@ -2,7 +2,7 @@ package com.hit.services;
 
 import com.hit.dm.DataModel;
 
-public class CacheUnitController<T> extends java.lang.Object {
+public class CacheUnitController<T> extends Object {
 
 	CacheUnitService<T> service;
 	
