@@ -40,6 +40,8 @@ public class CLI extends Observable implements Runnable {
                 flag = 1;
                 setChanged();
                 notifyObservers(start);
+                
+                
             }
             else if (userString.equals(shutdown)) {
                 write("Shutdown server");

@@ -35,7 +35,6 @@ public class CacheUnit<T> extends Object {
 			tmp = algo.getElement(ids[i]);
 			
 			if(tmp != null){ 
-				System.out.println(tmp.toString());
 				ret.add(tmp);
 			}
 			else {
@@ -46,6 +45,11 @@ public class CacheUnit<T> extends Object {
 						dao.delete(dump);
 						dao.save(dump);
 					}
+					ret.add(tmp);
+				}
+				else {
+					tmp = new DataModel<T>(ids[i], null);
+					dao.save(tmp);
 					ret.add(tmp);
 				}
 			}

@@ -23,37 +23,39 @@ public class HandleRequest<T> extends Object implements Runnable {
 
 	public HandleRequest(Socket s, CacheUnitController<T> controller) {
 		this.s = s;
-		this.controller = controller;		
-		
+		this.controller = controller;	
 	}
 	
 	public void run() {
 		try {
 			ObjectInputStream input=new ObjectInputStream(s.getInputStream());
-			String messageIn=(String)input.readObject();
+			
+			String req = (String)input.readObject();
 			
 			ref = new TypeToken<Request<DataModel<T>[]>>(){}.getType();
-			Request<DataModel<T>[]> request = new Gson().fromJson(messageIn, ref);
-			
+			Request<DataModel<T>[]> request = new Gson().fromJson(req, ref);
+						
 			headers = request.getHeaders();
 			body = request.getBody();
 			
-			while(!headers.isEmpty()) {
-				if(headers.containsKey("update")) {
-					headers.remove("update");
-					controller.update(body);
-				}
-				else if(headers.containsKey("get")) {
-					headers.remove("get");
-					controller.get(body);
-				}
-				else if(headers.containsKey("delete")) {
-					headers.remove("delete");
-					controller.delete(body);
-				}
+			/**/
+			System.out.println("headers: " + headers.values());
+			System.out.println("body: " + body.length);
+			/**/
+			
+			if(headers.containsValue("UPDATE")) {
+				controller.update(body);
+			}
+			else if(headers.containsValue("GET")) {
+				controller.get(body);
+			}
+			else if(headers.containsValue("DELETE")) {
+				controller.delete(body);
 			}
 			
+			
 			input.close();
+			s.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();

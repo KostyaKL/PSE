@@ -1,7 +1,6 @@
 package com.hit.server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,44 +15,49 @@ public class Server extends Object implements Observer {
 	ServerSocket server;
 	HandleRequest<String> handle;
 	CacheUnitController<String> controller;
+	Socket someClient;
 	
 	public Server() {
-		try {
-			server = new ServerSocket(12345);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+	
 	}
 	
 	public void start()	{
 		try {
-			//System.out.println("method start");
+			server = new ServerSocket(12345);
 			while(true) {
-				server.setSoTimeout(5000);
-				Socket someClient = server.accept();
-				ObjectOutputStream output=new ObjectOutputStream(someClient.getOutputStream());
-				ObjectInputStream input=new ObjectInputStream(someClient.getInputStream());
-				String messageIn;
+				server.setSoTimeout(60000);
+				
+				someClient = server.accept();
+				//ObjectOutputStream output=new ObjectOutputStream(someClient.getOutputStream());
 			
-				output.writeObject("you are connected to the server");
-				output.flush();
-			
-				messageIn=(String)input.readObject();
-				System.out.println("message from the client: "+messageIn);
+				System.out.println("you are connected to the server");
+				//output.writeObject("you are connected to the server");
+				//output.flush();
+				
 				controller = new CacheUnitController<String>();
 				handle  = new HandleRequest<String>(someClient, controller);
+				
 				new Thread(handle).start();
-			
-				output.writeObject("bye");
-				output.flush();
-				output.close();
-				input.close();
-				someClient.close();
+				
+
+				//System.out.println("bye");
+				//output.writeObject("bye");
+				//output.flush();
+				//output.close();
 			}
 		}
 		catch (Exception e) {
 			  System.out.println("tiered of waiting for connection " + e);
+		}
+		
+		finally {
+			try {
+				server.close();
+				someClient.close();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -66,6 +70,16 @@ public class Server extends Object implements Observer {
 				start();
 			}
 			else if(arg == "stop") {
+				try {
+					server.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		else if(o instanceof PartThreeTest) {
+			if(arg == "stop") {
 				try {
 					server.close();
 				}

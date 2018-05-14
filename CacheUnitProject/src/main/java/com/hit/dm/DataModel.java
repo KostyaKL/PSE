@@ -31,7 +31,7 @@ public class DataModel<T> extends Object implements Serializable {
 	@Override
 	public String toString() {
 		
-		return "ID: " + id.toString() + ", Content: " + content.toString();
+		return "dataModelId: " + id.toString() + ", content: " + content.toString();
 	}
 	
 	public Long getDataModelId() {
