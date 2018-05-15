@@ -8,9 +8,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Observable;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 public class PartThreeTest extends Observable implements Runnable {
 	
 	int port;

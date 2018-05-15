@@ -39,16 +39,18 @@ public class CacheUnit<T> extends Object {
 			}
 			else {
 				tmp = dao.find(ids[i]);
+				
 				if(tmp!= null) {
 					dump = algo.putElement(ids[i], tmp);
 					if(dump != null) {
 						dao.delete(dump);
 						dao.save(dump);
+
 					}
 					ret.add(tmp);
 				}
 				else {
-					tmp = new DataModel<T>(ids[i], null);
+					tmp = (DataModel<T>) new DataModel<String>(ids[i], "null");
 					dao.save(tmp);
 					ret.add(tmp);
 				}

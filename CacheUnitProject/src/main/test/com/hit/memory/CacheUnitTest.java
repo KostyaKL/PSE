@@ -43,10 +43,7 @@ class CacheUnitTest {
 			System.out.println("IOException " + e);
 		}
 		
-		System.out.println(algo.toString());
-		System.out.println(check[0].toString());
-		
-		Assert.assertEquals("[1, 2, 3] {1=dataModelId: 1, content: alice, 2=dataModelId: 2, content: bob, 3=dataModelId: 3, content: ron}", algo.toString());
-		Assert.assertEquals("dataModelId: 0, content: nissim", check[0].toString());
+		Assert.assertEquals("[2, 3, 4] {2=dataModelId:2,content:bob, 3=dataModelId:3,content:ron, 4=dataModelId:4,content:null}", algo.toString());
+		Assert.assertEquals("dataModelId:0,content:null", check[0].toString());
 	}
 }

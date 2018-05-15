@@ -40,7 +40,10 @@ public class HandleRequest<T> extends Object implements Runnable {
 			
 			/**/
 			System.out.println("headers: " + headers.values());
-			System.out.println("body: " + body.length);
+			int size = body.length;
+			for (int i=0; i< size; i++) {
+				System.out.println("body: " + body.toString());
+			}
 			/**/
 			
 			if(headers.containsValue("UPDATE")) {

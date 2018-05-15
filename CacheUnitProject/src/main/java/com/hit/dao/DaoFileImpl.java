@@ -47,7 +47,7 @@ public class DaoFileImpl<T> extends Object implements IDao<Long,DataModel<T>> {
 			scan = new Scanner(file);
 			while(scan.hasNext()) {
 				line = scan.nextLine().toString();
-				if(!line.contains("dataModelId: " + srchID + ", ")){
+				if(!line.contains("dataModelId:" + srchID + ",")){
 					fw.write(line + "\n");
 				}
 			}
@@ -78,8 +78,8 @@ public class DaoFileImpl<T> extends Object implements IDao<Long,DataModel<T>> {
 			while(scan.hasNext()) {
 				line = scan.nextLine().toString();
 				
-				if(line.contains("dataModelId: " + id.toString() + ", ")){
-					String remove = new String("dataModelId: " + id.toString() + ", content: ");
+				if(line.contains("dataModelId:" + id.toString() + ",")){
+					String remove = new String("dataModelId:" + id.toString() + ",content:");
 					content = (T)line.subSequence(remove.length(), line.length());
 					scan.close();
 					ret = new DataModel<T>(id, content);
