@@ -30,14 +30,14 @@ public class HandleRequest<T> extends Object implements Runnable {
 		try {
 			ObjectInputStream input=new ObjectInputStream(s.getInputStream());
 			
-			//String req = (String)input.readObject();
+			String req = (String)input.readObject();
 			
-			//ref = new TypeToken<Request<DataModel<T>[]>>(){}.getType();
-			//Request<DataModel<T>[]> request = new Gson().fromJson(req, ref);
+			ref = new TypeToken<Request<DataModel<T>[]>>(){}.getType();
+			Request<DataModel<T>[]> request = new Gson().fromJson(req, ref);
 			
-			@SuppressWarnings("unchecked")
+			/*@SuppressWarnings("unchecked")
 			Request<DataModel<T>[]> request = (Request<DataModel<T>[]>) input.readObject();
-			
+			*/
 			headers = request.getHeaders();
 			body = request.getBody();
 						
