@@ -6,23 +6,23 @@ public class DataModel<T> extends Object implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	Long id;
+	Long dataModelId;
 	T content;
 
-	public DataModel(Long id, T content) {
-		this.id = id;
+	public DataModel(Long dataModelId, T content) {
+		this.dataModelId = dataModelId;
 		this.content = content;
 	} 
 	
 	@Override
 	public int hashCode() {
 		
-		return id.hashCode();
+		return dataModelId.hashCode();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(id.hashCode() == obj.hashCode()) {
+		if(dataModelId.hashCode() == obj.hashCode()) {
 			return true;
 		}
 		return false;
@@ -31,16 +31,16 @@ public class DataModel<T> extends Object implements Serializable {
 	@Override
 	public String toString() {
 		
-		return "dataModelId:" + id.toString() + ",content:" + content.toString();
+		return "dataModelId:" + dataModelId.toString() + ",content:" + content.toString();
 	}
 	
 	public Long getDataModelId() {
 		
-		return id;
+		return dataModelId;
 	}
 	
-	public void setDataModelId(Long id) {
-		this.id = id;
+	public void setDataModelId(Long dataModelId) {
+		this.dataModelId = dataModelId;
 	}
 	
 	public T getContent() {

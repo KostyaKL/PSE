@@ -6,9 +6,15 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
-public class PartThreeTest extends Observable implements Runnable {
+import com.hit.dm.DataModel;
+
+public class PartThreeTest<T> extends Observable implements Runnable {
 	
 	int port;
 	String command;
@@ -32,6 +38,29 @@ public class PartThreeTest extends Observable implements Runnable {
             Socket echoSocket = null;
             ObjectOutputStream outC = null;
             //BufferedReader inC = null;
+            
+            
+            Map<String, String> headers = new HashMap<String, String>();
+            List<DataModel<T>> bodyTmp = new ArrayList<>();
+            DataModel<T> model;
+            
+            headers.put("action", "GET");
+            model = new DataModel<T>(new Long(111111), null);
+            bodyTmp.add(model);
+            model = new DataModel<T>(new Long(222222), null);
+            bodyTmp.add(model);
+            
+            @SuppressWarnings("unchecked")
+            DataModel<T>[] body = bodyTmp.toArray((DataModel<T>[]) new DataModel[2]);
+        	
+			Request<DataModel<T>[]> request = new Request<DataModel<T>[]>(headers, body);
+        	
+    		//System.out.println(request.toString());
+			int size = body.length;
+			for (int i=0; i< size; i++) {
+				System.out.println("body: " + body[i].toString());
+			}
+            
  
             try {
                 echoSocket = new Socket(serverHostname, port);
@@ -58,9 +87,8 @@ public class PartThreeTest extends Observable implements Runnable {
                     notifyObservers("stop");
                     break;
                 }
-                //outC.println(userInput);
-                outC.writeObject(userInput);
-                //System.out.println("server: " + inC.readLine());
+                outC.writeObject(request);
+                //outC.writeObject(userInput);
             }
  
             /** Closing all the resources */

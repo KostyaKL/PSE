@@ -8,7 +8,7 @@ public class Request<T> extends Object implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	Map<String, String> headers;
 	T body;
@@ -28,7 +28,6 @@ public class Request<T> extends Object implements Serializable {
 	}
 	
 	public T getBody() {
-		
 		return body;
 	}
 	

@@ -23,7 +23,7 @@ public class CacheUnitServerDriver extends Object {
 			e.printStackTrace();
 		}
 		
-		PartThreeTest test = new PartThreeTest();
+		PartThreeTest<String> test = new PartThreeTest<String>();
 		test.addObserver(server);
 		new Thread(test).start();
 	}
