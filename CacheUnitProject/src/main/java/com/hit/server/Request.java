@@ -5,9 +5,6 @@ import java.util.Map;
 
 public class Request<T> extends Object implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2L;
 	
 	Map<String, String> headers;

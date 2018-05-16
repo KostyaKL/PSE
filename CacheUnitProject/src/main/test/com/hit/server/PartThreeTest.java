@@ -3,10 +3,13 @@ package com.hit.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Observable;
+
+import com.hit.dm.DataModel;
 
 
 public class PartThreeTest extends Observable implements Runnable {
@@ -17,6 +20,7 @@ public class PartThreeTest extends Observable implements Runnable {
 		port = 12345;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
 		try {
@@ -26,11 +30,13 @@ public class PartThreeTest extends Observable implements Runnable {
  
             Socket echoSocket = null;
             ObjectOutputStream outC = null;
+            ObjectInputStream inC = null;
             
  
             try {
                 echoSocket = new Socket(serverHostname, port);
                 outC = new ObjectOutputStream(echoSocket.getOutputStream());
+                inC = new ObjectInputStream(echoSocket.getInputStream());
             } catch (UnknownHostException e) {
                 System.err.println("Unknown host: " + serverHostname);
                 System.exit(1);
@@ -52,6 +58,33 @@ public class PartThreeTest extends Observable implements Runnable {
                     break;
                 }
                 outC.writeObject(userInput);
+               
+                
+                
+                Object o;
+                o = inC.readObject();
+                
+                if(o instanceof Boolean) {
+                	if((boolean)o == true) {
+                		System.out.println("good");
+                	}
+                	else {
+                		System.out.println("bad");
+                	}
+                }
+                
+                else {
+                	Request<DataModel<String>[]> request;
+                	DataModel<String>[] body;
+                
+                	request = (Request<DataModel<String>[]>) o;
+                	body = request.getBody();
+                
+                	int size = body.length;
+                	for (int i=0; i< size; i++) {
+                		System.out.println("body: " + body[i].toString());
+                	}
+                }
             }
  
             outC.close();

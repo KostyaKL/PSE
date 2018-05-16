@@ -1,6 +1,7 @@
 package com.hit.server;
 
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.Map;
@@ -29,34 +30,30 @@ public class HandleRequest<T> extends Object implements Runnable {
 	public void run() {
 		try {
 			ObjectInputStream input=new ObjectInputStream(s.getInputStream());
+			ObjectOutputStream output=new ObjectOutputStream(s.getOutputStream());
 			
 			String req = (String)input.readObject();
 			
 			ref = new TypeToken<Request<DataModel<T>[]>>(){}.getType();
 			Request<DataModel<T>[]> request = new Gson().fromJson(req, ref);
 			
-			/*@SuppressWarnings("unchecked")
-			Request<DataModel<T>[]> request = (Request<DataModel<T>[]>) input.readObject();
-			*/
 			headers = request.getHeaders();
 			body = request.getBody();
-						
-			/**/
-			System.out.println("headers: " + headers.values());
-			int size = body.length;
-			for (int i=0; i< size; i++) {
-				System.out.println("body: " + body[i].toString());
-			}
-			/**/
 			
 			if(headers.containsValue("UPDATE")) {
-				controller.update(body);
+				Boolean ret = controller.update(body);
+				output.writeObject(ret);
 			}
+			
 			else if(headers.containsValue("GET")) {
-				controller.get(body);
+				body = controller.get(body);
+				request.setBody(body);
+				output.writeObject(request);
 			}
+			
 			else if(headers.containsValue("DELETE")) {
-				controller.delete(body);
+				Boolean ret = controller.delete(body);
+				output.writeObject(ret);
 			}
 			
 			

@@ -26,16 +26,8 @@ public class CacheUnitService<T> extends Object {
 	}
 	
 	public boolean update(DataModel<T>[] dataModels) {
-	
-		return false;
-	}
-	
-	public boolean delete(DataModel<T>[] dataModels) {
-		
-		return false;
-	}
-	
-	public DataModel<T>[] get(DataModel<T>[] dataModels){
+		boolean ret = false;
+		DataModel<T> tmp = null;
 		List<Long> ids = new ArrayList<>();
 		int size;
 		size = dataModels.length;
@@ -44,12 +36,83 @@ public class CacheUnitService<T> extends Object {
 		}
 		
 		try {
-			cache.getDataModels(ids.toArray((Long[]) new Long[size]));
+			for(int i=0;i<size;i++) {
+				tmp = algo.getElement(ids.get(i));
+				if(tmp != null) {
+					tmp.setContent(dataModels[i].getContent());
+					algo.putElement(ids.get(i), tmp);
+					ret = true;
+				}
+				else {
+					tmp = dao.find(ids.get(i));
+					if(tmp != null) {
+						dao.delete(tmp);
+						tmp.setContent(dataModels[i].getContent());
+						dao.save(tmp);
+						ret = true;
+					}
+					else {
+						tmp = new DataModel<T>(ids.get(i), dataModels[i].getContent());
+						dao.save(tmp);
+						ret = true;
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public boolean delete(DataModel<T>[] dataModels) {
+		boolean ret = false;
+		DataModel<T> tmp = null;
+		List<Long> ids = new ArrayList<>();
+		int size;
+		size = dataModels.length;
+		for(int i=0;i<size;i++) {
+			ids.add(dataModels[i].getDataModelId());
+		}
+		
+		try {
+			for(int i=0;i<size;i++) {
+				tmp = algo.getElement(ids.get(i));
+				if(tmp != null) {
+					algo.removeElement(ids.get(i));
+					ret = true;
+				}
+				else {
+					tmp = dao.find(ids.get(i));
+					if(tmp != null) {
+						dao.delete(tmp);
+						ret = true;
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public DataModel<T>[] get(DataModel<T>[] dataModels){
+		DataModel<T>[] ret = null;
+		List<Long> ids = new ArrayList<>();
+		int size;
+		size = dataModels.length;
+		for(int i=0;i<size;i++) {
+			ids.add(dataModels[i].getDataModelId());
+		}
+		
+		try {
+			ret = cache.getDataModels(ids.toArray((Long[]) new Long[size]));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return dataModels;
+		return ret;
 	}
 }

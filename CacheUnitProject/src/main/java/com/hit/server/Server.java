@@ -9,17 +9,19 @@ import java.util.Observer;
 import com.hit.services.CacheUnitController;
 import com.hit.util.CLI;
 
+@SuppressWarnings("rawtypes")
 public class Server extends Object implements Observer {
 
 	ServerSocket server;
-	HandleRequest<String> handle;
-	CacheUnitController<String> controller;
+	HandleRequest handle;
+	CacheUnitController controller;
 	Socket someClient;
 	
 	public Server() {
 	
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void start()	{
 		try {
 			server = new ServerSocket(12345);
@@ -33,16 +35,11 @@ public class Server extends Object implements Observer {
 				//output.writeObject("you are connected to the server");
 				//output.flush();
 				
-				controller = new CacheUnitController<String>();
-				handle  = new HandleRequest<String>(someClient, controller);
+				controller = new CacheUnitController();
+				handle  = new HandleRequest(someClient, controller);
 				
 				new Thread(handle).start();
 				
-
-				//System.out.println("bye");
-				//output.writeObject("bye");
-				//output.flush();
-				//output.close();
 			}
 		}
 		catch (Exception e) {
