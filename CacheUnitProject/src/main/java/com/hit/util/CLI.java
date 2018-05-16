@@ -40,7 +40,7 @@ public class CLI extends Observable implements Runnable {
                 flag = 1;
                 setChanged();
                 notifyObservers(start);
-                
+                Thread.currentThread().interrupt();
                 
             }
             else if (userString.equals(shutdown)) {

@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Observable;
+import java.util.concurrent.TimeUnit;
 
 import com.hit.dm.DataModel;
 
@@ -52,14 +53,22 @@ public class PartThreeTest extends Observable implements Runnable {
                 System.out.print("client: ");
                 String userInput = stdIn.readLine();
                 if ("q".equals(userInput)) {
+                	outC.writeObject("");
+                    outC.flush();
                 	echoSocket.close();
                 	setChanged();
                     notifyObservers("stop");
                     break;
                 }
                 outC.writeObject(userInput);
+                outC.flush();
                
-                
+                try {
+        			TimeUnit.SECONDS.sleep(1);
+        		} catch (InterruptedException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        		}
                 
                 Object o;
                 o = inC.readObject();
@@ -88,6 +97,7 @@ public class PartThreeTest extends Observable implements Runnable {
             }
  
             outC.close();
+            inC.close();
             stdIn.close();           
         }
 		catch (Exception e) {

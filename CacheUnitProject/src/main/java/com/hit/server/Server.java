@@ -16,16 +16,18 @@ public class Server extends Object implements Observer {
 	HandleRequest handle;
 	CacheUnitController controller;
 	Socket someClient;
+	Thread client;
+	int flag;
 	
 	public Server() {
-	
+		flag = 1;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void start()	{
 		try {
 			server = new ServerSocket(12345);
-			while(true) {
+			while(flag == 1) {
 				server.setSoTimeout(60000);
 				
 				someClient = server.accept();
@@ -38,7 +40,8 @@ public class Server extends Object implements Observer {
 				controller = new CacheUnitController();
 				handle  = new HandleRequest(someClient, controller);
 				
-				new Thread(handle).start();
+				client = new Thread(handle);
+				client.start();
 				
 			}
 		}
@@ -67,6 +70,8 @@ public class Server extends Object implements Observer {
 			}
 			else if(arg == "stop") {
 				try {
+					flag = 0;
+					client.interrupt();
 					server.close();
 				}
 				catch (IOException e) {
@@ -77,6 +82,8 @@ public class Server extends Object implements Observer {
 		else if(o instanceof PartThreeTest) {
 			if(arg == "stop") {
 				try {
+					flag = 0;
+					client.interrupt();
 					server.close();
 				}
 				catch (IOException e) {
