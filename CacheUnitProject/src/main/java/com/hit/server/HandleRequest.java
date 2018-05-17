@@ -48,7 +48,7 @@ public class HandleRequest<T> extends Object implements Runnable {
 					body = request.getBody();
 			
 					if(headers.containsValue("UPDATE")) {
-						Boolean ret = controller.update(body);
+						Boolean ret = new Boolean(controller.update(body));
 						output.writeObject(ret);
 						output.flush();
 					}
@@ -61,7 +61,7 @@ public class HandleRequest<T> extends Object implements Runnable {
 					}
 			
 					else if(headers.containsValue("DELETE")) {
-						Boolean ret = controller.delete(body);
+						Boolean ret = new Boolean(controller.delete(body));
 						output.writeObject(ret);
 						output.flush();					
 					}
