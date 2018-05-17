@@ -53,7 +53,7 @@ public class PartThreeTest extends Observable implements Runnable {
                 System.out.print("client: ");
                 String userInput = stdIn.readLine();
                 if ("q".equals(userInput)) {
-                	outC.writeObject("");
+                	outC.writeObject(" ");
                     outC.flush();
                 	echoSocket.close();
                 	setChanged();
