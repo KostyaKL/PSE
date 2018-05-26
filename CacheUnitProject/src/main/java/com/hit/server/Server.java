@@ -3,6 +3,8 @@ package com.hit.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,10 +18,14 @@ public class Server extends Object implements Observer {
 	CacheUnitController<String> controller;
 	Socket socket;
 	Thread client;
+	
+	List<Thread> clientList;
+	
 	int flag;
 	
 	public Server() {
 		flag = 1;
+		clientList = new ArrayList<Thread>();
 	}
 	
 	public void start()	{
@@ -31,7 +37,7 @@ public class Server extends Object implements Observer {
 				socket = server.accept();
 				//ObjectOutputStream output=new ObjectOutputStream(someClient.getOutputStream());
 			
-				System.out.println("you are connected to the server");
+				//System.out.println("you are connected to the server");
 				//output.writeObject("you are connected to the server");
 				//output.flush();
 				
@@ -40,6 +46,7 @@ public class Server extends Object implements Observer {
 				
 				client = new Thread(handle);
 				client.start();
+				clientList.add(client);
 				
 			}
 		}
@@ -69,19 +76,11 @@ public class Server extends Object implements Observer {
 			else if(arg == "stop") {
 				try {
 					flag = 0;
-					client.interrupt();
-					server.close();
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		else if(o instanceof PartThreeTest) {
-			if(arg == "stop") {
-				try {
-					flag = 0;
-					client.interrupt();
+					int size = clientList.size();
+					for (int i=0;i<size;i++) {
+						client = clientList.get(i);
+						client.interrupt();
+					}
 					server.close();
 				}
 				catch (IOException e) {

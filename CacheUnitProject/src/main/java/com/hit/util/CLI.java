@@ -31,27 +31,23 @@ public class CLI extends Observable implements Runnable {
     }
     
     public void run() {
-        int flag = 0;
-        write("Please enter your command");
-        do {
+        
+        while (true) {
+        	write("Please enter your command");
             userString = in.nextLine();
             if(userString.equals(start)) {
                 write("Starting server.....");
-                flag = 1;
                 setChanged();
-                notifyObservers(start);
-                Thread.currentThread().interrupt();
-                
+                notifyObservers(start);                
             }
             else if (userString.equals(shutdown)) {
                 write("Shutdown server");
-                flag = 2;
                 setChanged();
                 notifyObservers(shutdown);
             }
             else {
                 write("Not a valid command");
             }
-        } while (flag == 0);
+        }
     }
 }
