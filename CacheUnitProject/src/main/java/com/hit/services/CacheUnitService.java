@@ -35,7 +35,6 @@ public class CacheUnitService<T> extends Object {
 			ids.add(dataModels[i].getDataModelId());
 		}
 		
-		try {
 			for(int i=0;i<size;i++) {
 				tmp = algo.getElement(ids.get(i));
 				if(tmp != null) {
@@ -58,10 +57,6 @@ public class CacheUnitService<T> extends Object {
 					}
 				}
 			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
 		return ret;
 	}
 	
@@ -74,8 +69,6 @@ public class CacheUnitService<T> extends Object {
 		for(int i=0;i<size;i++) {
 			ids.add(dataModels[i].getDataModelId());
 		}
-		
-		try {
 			for(int i=0;i<size;i++) {
 				tmp = algo.getElement(ids.get(i));
 				if(tmp != null) {
@@ -90,10 +83,7 @@ public class CacheUnitService<T> extends Object {
 					}
 				}
 			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 		return ret;
 	}
 	

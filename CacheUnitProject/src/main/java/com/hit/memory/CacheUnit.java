@@ -29,8 +29,6 @@ public class CacheUnit<T> extends Object {
 		
 		List<DataModel<T>> ret = new ArrayList<>();
 		
-		
-		
 		for(int i=0;i<size;i++) {
 			tmp = algo.getElement(ids[i]);
 			
@@ -45,7 +43,6 @@ public class CacheUnit<T> extends Object {
 					if(dump != null) {
 						dao.delete(dump);
 						dao.save(dump);
-
 					}
 					ret.add(tmp);
 				}

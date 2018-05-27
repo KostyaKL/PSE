@@ -15,7 +15,7 @@ public class CLI extends Observable implements Runnable {
     
     Scanner in;
     PrintWriter out;
-    
+        
     public CLI(InputStream in, OutputStream out) {
         this.out = new PrintWriter(out, true);
         this.in = new Scanner(in);
@@ -44,6 +44,7 @@ public class CLI extends Observable implements Runnable {
                 write("Shutdown server");
                 setChanged();
                 notifyObservers(shutdown);
+                break;
             }
             else {
                 write("Not a valid command");
