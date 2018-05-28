@@ -1,7 +1,6 @@
 package com.hit.server;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -34,10 +33,6 @@ public class Server extends Object implements Observer {
 				server.setSoTimeout(60000);
 				
 				socket = server.accept();
-				ObjectOutputStream output=new ObjectOutputStream(socket.getOutputStream());
-			
-				output.writeObject("you are connected to the server");
-				output.flush();
 				
 				controller = new CacheUnitController<String>();
 				handle  = new HandleRequest<String>(socket, controller);

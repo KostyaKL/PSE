@@ -3,3 +3,10 @@
 {"headers":{"action":"GET"},"body":[{"dataModelId":111111,"content":null},{"dataModelId":222222,"content":null}]}
 
 { "headers":{"action":"DELETE"},"body":[{"dataModelId":33333,"content":null},{"dataModelId":222222,"content":null}]}
+
+
+
+
+{"headers":{"action":"LOGIN","username":"Nissim","password":"123456"},"body":[]}
+
+{"headers": {"action":"GET", "sessionId": "ba6a9c77-3b5d-4746-88e3-71fa2e738272_1527186265554"},"body":[{"dataModelId":111111,"content":"I"},{"dataModelId":222222,"content":"Love"},{"dataModelId":333333,"content":"Java"}]}
