@@ -23,6 +23,8 @@ public class AuthManeger {
 	Scanner scan;
 	String line;
 	
+	String currentSession;
+	
 	Type ref;
 	
 	public AuthManeger() {
@@ -49,6 +51,7 @@ public class AuthManeger {
 		
 		scan.close();
 		
+		currentSession = UUID.randomUUID().toString();
 	}
 
 	public String loginProcess(String userAndPassword) {
@@ -74,7 +77,7 @@ public class AuthManeger {
 		}
 		
 		if(users.get(userName).equals(passWord)) {
-			return UUID.randomUUID().toString() + "_" + new Long(System.currentTimeMillis()).toString();
+			return currentSession + "_" + new Long(System.currentTimeMillis()).toString();
 		}
 		
 		return null;
@@ -87,6 +90,7 @@ public class AuthManeger {
 		}
 		
 		String sessionTime;
+		String sessionName;
 		long st=0;
 		
 		int size = session.length();
@@ -97,6 +101,7 @@ public class AuthManeger {
 			}
 		}
 		
+		sessionName = session.substring(0, mark);
 		sessionTime = session.substring(mark +1, size);
 		size = sessionTime.length();
 		for(int i=0;i<size;i++) {
@@ -104,14 +109,10 @@ public class AuthManeger {
 			st+=sessionTime.charAt(i) - 48;
 		}
 		
-		// Create a calendar object with today date.
 		Calendar calendar = Calendar.getInstance();
-
-		// Move calendar to yesterday
 		calendar.add(Calendar.DATE, -1);
-		calendar.getTimeInMillis();
 		
-		if(st - calendar.getTimeInMillis() > 0) {
+		if(st - calendar.getTimeInMillis() > 0 && currentSession.equals(sessionName)) {
 			return true;
 		}
 		
