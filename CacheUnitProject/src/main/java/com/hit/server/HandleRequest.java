@@ -124,7 +124,6 @@ public class HandleRequest<T> extends Object implements Runnable {
 					}
 				}
 			}
-			
 		}
 		catch(EOFException e) {
 		//	e.printStackTrace();
@@ -132,7 +131,7 @@ public class HandleRequest<T> extends Object implements Runnable {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		finally{
+		finally{ 
 			try {
 				input.close();
 				output.close();
