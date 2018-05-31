@@ -6,13 +6,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.hit.authentication.AuthManeger;
 import com.hit.dm.DataModel;
+import com.hit.serverstatus.StatObj;
 import com.hit.services.CacheUnitController;
 
 public class HandleRequest<T> extends Object implements Runnable {
@@ -28,19 +31,27 @@ public class HandleRequest<T> extends Object implements Runnable {
 	ObjectInputStream input;
 	ObjectOutputStream output;
 	
-	String req;
+	String req;	
 	
 	AuthManeger auth;
 	String sessionID;
 	String action;
-	boolean valid;
+	boolean valid;	
+	Map<String, String> userID;
 	
+	StatObj statObj;
+	Integer noOfDM;
 	
-	public HandleRequest(Socket s, CacheUnitController<T> controller) {
+	public HandleRequest(Socket s, CacheUnitController<T> controller, StatObj statObj) {
 		this.s = s;
 		this.controller = controller;
 		ref = new TypeToken<Request<DataModel<T>[]>>(){}.getType();
 		auth = new AuthManeger();
+
+		userID = new HashMap<String, String>();
+		this.statObj = statObj;
+		this.statObj.setCurrentUsers(new Long(1));
+		noOfDM = new Integer(0);
 	}
 	
 	public void run() {
@@ -55,7 +66,11 @@ public class HandleRequest<T> extends Object implements Runnable {
 				
 				req = (String)input.readObject();
 				if(req.equals("stop")) {
-					
+					statObj.setCurrentUsers(new Long(-1));
+					statObj.setAvarageDatamodelID(noOfDM);
+					userID.put("userId", UUID.randomUUID().toString());
+					userID.put("Requests", noOfDM.toString());
+					statObj.setUserID(userID);
 					break;
 				}
 					
@@ -78,9 +93,14 @@ public class HandleRequest<T> extends Object implements Runnable {
 					if (sessionID != null) {
 						valid = auth.validateSession(sessionID);
 					}
+					
 					action = headers.get("action");
 					if (action == null) {
 						action = "";
+					}
+					
+					if(body != null) {
+						noOfDM += body.length;
 					}
 								
 					if(action.equals("UPDATE") && valid == true) {
@@ -93,13 +113,19 @@ public class HandleRequest<T> extends Object implements Runnable {
 						body = controller.get(body);
 						request.setBody(body);
 						
-						output.writeObject("array");
-						int size = body.length;
-						output.writeObject(new Integer(size));
-						for(int i=0;i<size;i++) {
-							output.writeObject(body[i].toString());
+						if(body == null) {
+							output.writeObject("get error");
+							output.flush();	
 						}
-						output.flush();
+						else {
+							output.writeObject("array");
+							int size = body.length;
+							output.writeObject(new Integer(size));
+							for(int i=0;i<size;i++) {
+								output.writeObject(body[i].toString());
+							}
+							output.flush();
+						}
 					}
 			
 					else if(action.equals("DELETE") && valid == true) {
@@ -118,8 +144,9 @@ public class HandleRequest<T> extends Object implements Runnable {
 						}
 						output.flush();	
 					}
+					
 					else {
-						output.writeObject("validation error");
+						output.writeObject("request error");
 						output.flush();	
 					}
 				}

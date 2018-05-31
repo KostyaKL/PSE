@@ -10,6 +10,7 @@ public class CLI extends Observable implements Runnable {
 
     String start;
     String shutdown;
+    String stat;
     
     String userString;
     
@@ -22,6 +23,7 @@ public class CLI extends Observable implements Runnable {
         
         start = "start";
         shutdown = "stop";
+        stat = "stat";
         
         userString = "";
     }
@@ -45,6 +47,11 @@ public class CLI extends Observable implements Runnable {
                 setChanged();
                 notifyObservers(shutdown);
                 break;
+            }
+            else if (userString.equals(stat)) {
+                write("server status");
+                setChanged();
+                notifyObservers(stat);
             }
             else {
                 write("Not a valid command");

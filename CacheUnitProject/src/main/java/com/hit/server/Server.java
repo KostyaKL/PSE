@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.hit.serverstatus.ServerStatus;
+import com.hit.serverstatus.StatObj;
 import com.hit.services.CacheUnitController;
 import com.hit.util.CLI;
 
@@ -21,9 +23,18 @@ public class Server extends Object implements Observer {
 	
 	List<Thread> clientList;
 	
+	ServerStatus serverStatus;
+	StatObj statObj;
+	
+	Long maxUsers;
+	
 	
 	public Server() {
 		clientList = new ArrayList<Thread>();
+		
+		statObj = new StatObj();
+		
+		maxUsers = new Long(0);
 	}
 	
 	public void start()	{
@@ -35,11 +46,14 @@ public class Server extends Object implements Observer {
 				socket = server.accept();
 				
 				controller = new CacheUnitController<String>();
-				handle  = new HandleRequest<String>(socket, controller);
+				handle  = new HandleRequest<String>(socket, controller, statObj);
 				
 				client = new Thread(handle);
 				client.start();
 				clientList.add(client);
+				if (maxUsers <= clientList.size()) {
+					maxUsers = new Long(clientList.size());
+				}
 				
 			} while (socket != null && !socket.isClosed());
 		}
@@ -91,6 +105,11 @@ public class Server extends Object implements Observer {
 				catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
+			else if(arg == "stat") {
+				statObj.setMaxUsers(maxUsers);
+				serverStatus = new ServerStatus(statObj);
+				serverStatus.get();
 			}
 		}
 	}
