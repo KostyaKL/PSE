@@ -41,9 +41,10 @@ public class Server extends Object implements Observer {
 		try {
 			server = new ServerSocket(12345);
 			do {
-				server.setSoTimeout(60000);
+				server.setSoTimeout(0);
 				
 				socket = server.accept();
+				
 				
 				controller = new CacheUnitController<String>();
 				handle  = new HandleRequest<String>(socket, controller, statObj);
